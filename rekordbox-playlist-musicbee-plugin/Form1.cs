@@ -100,9 +100,9 @@ namespace MusicBeePlugin
 
             foreach (var kvp in existingPlaylists)
             {
-                if (kvp.Value == playlistName)
+                if (kvp.Value == expectedEnd)
                 {
-                    if (kvp.Key.EndsWith(expectedEnd, StringComparison.OrdinalIgnoreCase) ||
+                    if (kvp.Key.EndsWith(expectedEnd + ".mbp", StringComparison.OrdinalIgnoreCase) ||
                         kvp.Key.EndsWith(expectedEnd.Replace("\\", "/"), StringComparison.OrdinalIgnoreCase))
                     {
                         return kvp.Key;
