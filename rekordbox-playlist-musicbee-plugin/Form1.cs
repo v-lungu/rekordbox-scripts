@@ -18,7 +18,8 @@ namespace MusicBeePlugin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string xmlPath = @"V:\MyFiles\Documents\github-projects\rekordbox-playlist-musicbee-plugin\RekordBoxLibrary.xml";
+            string pluginFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string xmlPath = Path.Combine(pluginFolder, "RekordBoxLibrary.xml");
 
             if (!File.Exists(xmlPath))
             {
