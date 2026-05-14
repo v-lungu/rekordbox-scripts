@@ -1,0 +1,50 @@
+# ========================
+# C# / .NET
+# ========================
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.exe
+*.dll
+*.pdb
+*.user
+*.suo
+*.cache
+*.userosscache
+*.sln.docstates
+.vs/
+
+# NuGet
+packages/
+*.nupkg
+
+# Build results
+[Bb]uild[Ll]og.*
+*.log
+
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# ========================
+# IDE / OS
+# ========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+Thumbs.db
+.DS_Store
+desktop.ini
