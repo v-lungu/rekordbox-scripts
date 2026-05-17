@@ -9,8 +9,4 @@ This MusicBee plugin takes a RekordBox library export XML and converts it into a
 3. Export RekordBox library by selecting File > Export collection in xml format
 4. Start MusicBee
 5. Start plugin by selecting Tools > Convert RekordBox Library
-6. Click the big button and wait for output
-
-## To Do 
-- Create efficient FindPlaylist method, currently it just cycles through a list
-- 
+6. Click the big button and select the saced XML
