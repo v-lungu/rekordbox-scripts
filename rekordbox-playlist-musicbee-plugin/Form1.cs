@@ -18,13 +18,15 @@ namespace MusicBeePlugin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string pluginFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string xmlPath = Path.Combine(pluginFolder, "RekordBoxLibrary.xml");
-
-            if (!File.Exists(xmlPath))
+            string xmlPath;
+            using (var dialog = new OpenFileDialog())
             {
-                MessageBox.Show("XML file not found: " + xmlPath);
-                return;
+                dialog.Title = "Select RekordBox Library XML";
+                dialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+                dialog.DefaultExt = "xml";
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+                xmlPath = dialog.FileName;
             }
 
             try
@@ -42,9 +44,7 @@ namespace MusicBeePlugin
                         string location = track.Attribute("Location")?.Value;
                         if (trackId != null && location != null)
                         {
-                            string filePath = Uri.UnescapeDataString(
-                                location.Replace("file://localhost/", "")
-                            ).Replace("/", "\\");
+                            string filePath = Uri.UnescapeDataString(new Uri(location).AbsolutePath).TrimStart('/').Replace("/", "\\");
                             trackLookup[trackId] = filePath;
                         }
                     }
@@ -85,7 +85,8 @@ namespace MusicBeePlugin
                 while ((playlistUrl = mbApi.Playlist_QueryGetNextPlaylist()) != null)
                 {
                     string name = mbApi.Playlist_GetName(playlistUrl);
-                    lookup[playlistUrl] = name;
+                    if (name != null)
+                        lookup[name] = playlistUrl;
                 }
             }
             return lookup;
@@ -94,22 +95,12 @@ namespace MusicBeePlugin
         private string FindPlaylist(string playlistName, string folderPath,
             Dictionary<string, string> existingPlaylists)
         {
-            string expectedEnd = string.IsNullOrEmpty(folderPath)
+            string key = string.IsNullOrEmpty(folderPath)
                 ? playlistName
                 : folderPath + "\\" + playlistName;
 
-            foreach (var kvp in existingPlaylists)
-            {
-                if (kvp.Value == expectedEnd)
-                {
-                    if (kvp.Key.EndsWith(expectedEnd + ".mbp", StringComparison.OrdinalIgnoreCase) ||
-                        kvp.Key.EndsWith(expectedEnd.Replace("\\", "/"), StringComparison.OrdinalIgnoreCase))
-                    {
-                        return kvp.Key;
-                    }
-                }
-            }
-            return null;
+            existingPlaylists.TryGetValue(key, out string url);
+            return url;
         }
 
         private void ProcessNode(XElement node, string folderPath,
